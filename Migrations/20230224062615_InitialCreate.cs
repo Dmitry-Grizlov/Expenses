@@ -21,10 +21,7 @@ namespace Expenses.Migrations
                     Icon = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: true),
                     Type = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Categories", x => x.CategoryId);
-                });
+                constraints: table => { table.PrimaryKey("PK_Categories", x => x.CategoryId); });
 
             migrationBuilder.CreateTable(
                 name: "Transactions",
