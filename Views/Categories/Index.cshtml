@@ -3,7 +3,7 @@
 @{
     ViewData["PageTitle"] = "Categories";
     ViewData["PageActionText"] = "+ New Category";
-    ViewData["PageActionUrl"] = "AddOrEdit";
+    ViewData["PageActionUrl"] = "Categories/AddOrEdit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -12,7 +12,7 @@
         <ejs-grid id="categories" dataSource="@Model" gridLines="None" allowSorting="true" allowPaging="true">
             <e-grid-pagesettings pageSize="5"></e-grid-pagesettings>
             <e-grid-columns>
-                <e-grid-column headerText="Category" field ="Title"></e-grid-column>
+                <e-grid-column headerText="Category" field ="IconWithTitle"></e-grid-column>
                 <e-grid-column headerText="Type" template="#typeBadge" width="150px"></e-grid-column>
                 <e-grid-column headerText="Actions" template="#actions" width="100px"></e-grid-column>
             </e-grid-columns>
@@ -41,7 +41,7 @@
         <form action="Categories/Delete/${CategoryId}" method="POST">
             @Html.AntiForgeryToken()
             <button type="submit" class="btn btn-sm no-a-decoration"
-            onclick="return confirm(&qout:Are you sure you want to delete this record?&qout:)">
+            onclick="return confirm(`Are you sure you want to delete this record?`)">
                 <i class="fa-solid fa-trash-can fa-lg text-danger"></i>
             </button>
         </form>
