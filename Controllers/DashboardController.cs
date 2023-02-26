@@ -44,11 +44,54 @@ public class DashboardController : Controller
             .GroupBy(x => x.CategoryId)
             .Select(x => new
             {
-                Amount = x.Sum(x=>x.Amount),
-                FormattedAmount = x.Sum(x=>x.Amount).ToString("C0"),
+                Amount = x.Sum(y => y.Amount),
+                FormattedAmount = x.Sum(y => y.Amount).ToString("C0"),
                 Category = x.First()?.Category?.Icon + " " + x.First()?.Category?.Title
+            })
+            .OrderByDescending((x => x.Amount))
+            .ToList();
+
+        var incomeSummary = transactions
+            .Where(x => x.Category?.Type == "Income")
+            .GroupBy(x => x.Date)
+            .Select(x => new SplineChartData()
+            {
+                Day = x.First().Date.ToString("dd-MM"),
+                Income = x.Sum(y=>y.Amount)
+            }).ToList();
+        
+        var expenseSummary = transactions
+            .Where(x => x.Category?.Type == "Expense")
+            .GroupBy(x => x.Date)
+            .Select(x => new SplineChartData()
+            {
+                Day = x.First().Date.ToString("dd-MM"),
+                Expense = x.Sum(y=>y.Amount)
             }).ToList();
 
+        var days = Enumerable.Range(0, 7)
+            .Select(x => startDate.AddDays(x).ToString("dd-MM")).ToArray();
+
+        ViewBag.SplineChartData = from day in days
+            join income in incomeSummary on day equals income.Day
+                into dayIncomeJoined
+            from income in dayIncomeJoined.DefaultIfEmpty()
+            join expense in expenseSummary on day equals expense.Day
+                into expenseJoined
+            from expense in expenseJoined.DefaultIfEmpty()
+            select new
+            {
+                Day = day,
+                Income = income?.Income ?? 0,
+                Expense = expense?.Expense ?? 0
+            };
+
+        ViewBag.RecentTransactions = await _context.Transactions
+            .Include(x => x.Category)
+            .OrderByDescending(x => x.Date)
+            .Take(5)
+            .ToListAsync();
+        
         return View();
     }
 }
