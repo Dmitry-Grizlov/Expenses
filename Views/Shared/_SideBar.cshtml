@@ -1,3 +1,97 @@
-<ejs-sidebar id="sidebar" width="290px">
-	
+@{
+    var menuItems = new List<object>()
+    {
+        new
+        {
+            text = "General",
+            separator = true
+        },
+        new
+        {
+            text = "Dashboard",
+            url = "/",
+            iconCss = "fa-solid fa-box"
+        },
+        new
+        {
+            text = "Categories",
+            url = "/Categories",
+            iconCss = "fa-solid fa-folder-closed",
+            items = new List<object>
+            {
+                new
+                {
+                    text = "Add new category",
+                    url = "/Categories/AddOrEdit",
+                }
+            }
+        },
+        new
+        {
+            text = "Transactions",
+            url = "/Transactions",
+            iconCss = "fa-solid fa-arrow-right",
+            items = new List<object>
+            {
+                new
+                {
+                    text = "Add new transaction",
+                    url = "/Transactions/AddOrEdit",
+                    iconCss = "fa-solid fa-plus"
+                }
+            }
+        },
+        new
+        {
+            text = "Extras",
+            separator = true
+        },
+        new
+        {
+            text = "Reports",
+            url = "#",
+            iconCss = "fa-solid fa-chart-simple"
+        },
+        new
+        {
+            text = "Settings",
+            url = "#",
+            iconCss = "fa-solid fa-gear"
+        }
+    };
+
+}
+
+<ejs-sidebar id="sidebar" width="290px" enableDock dockSize="100px" target=".dock-target">
+    <e-content-template>
+        <div class="logo-wrapper">
+            <div class="app-logo">
+                <img src="~/favicon.png" alt="Logo">
+            </div>
+            <div class="w-100"></div>
+            <i id="sidebar-toggle" class="fa-solid"></i>
+        </div>
+        <div class="profile-wrapper">
+            <img class="profile-pic" src="~/blank-profile-picture-973460_960_720.webp" alt="Profile image"/>
+            <div class="titles d-flex flex-column ps-3">
+                <h6 class="mb-0">Wallet App</h6>
+                <span class="text-muted">Ashton Cox</span>
+            </div>
+        </div>
+        <ejs-menu
+            id="menu"
+            items="menuItems"
+            orientation="Vertical"
+            hamburgerMode>
+        </ejs-menu>
+    </e-content-template>
 </ejs-sidebar>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function (){
+       let dockBar = document.getElementById('sidebar').ej2_instances[0];
+       document.getElementById('sidebar-toggle').onclick = function (){
+           dockBar.toggle();    
+       };
+    });
+</script>
